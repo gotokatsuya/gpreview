@@ -10,5 +10,6 @@ func init() {
 }
 
 func main() {
-	log.Println(gp.InsertReviews("gpreviews.db", "review_2015-11-14.csv"))
+	needTranslateJa := false
+	log.Println(gp.InsertReviews("gpreviews.db", "review_2015-11-14.csv", needTranslateJa))
 }

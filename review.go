@@ -57,10 +57,12 @@ func (r *Review) Insert(db *sql.DB) error {
 	return nil
 }
 
-func InsertReviews(dbName, fileName string) error {
+func InsertReviews(dbName, fileName string, tranlate bool) error {
 	db := OpenDatabase(dbName)
 
 	defer db.Close()
+
+	atmc := new(AccessTokenMessageCache)
 
 	file, err := os.Open(fileName)
 	if err != nil {
@@ -86,14 +88,41 @@ func InsertReviews(dbName, fileName string) error {
 		log.Printf("%#v", record)
 
 		review := Review{
-			PackageName:             record[0],
-			ReviewSubmitDateAndTime: record[1],
+			PackageName:                      record[0],
+			AppVersion:                       record[1],
+			ReviewerLanguage:                 record[2],
+			ReviewerHardwareModel:            record[3],
+			ReviewSubmitDateAndTime:          record[4],
+			ReviewSubmitMillisSinceEpoch:     record[5],
+			ReviewLastUpdateDateAndTime:      record[6],
+			ReviewLastUpdateMillisSinceEpoch: record[7],
+			StarRating:                       record[8],
+			ReviewTitle:                      record[9],
+			ReviewText:                       record[10],
+			DeveloperReplyDateAndTime:        record[11],
+			DeveloperReplyMillisSinceEpoch:   record[12],
+			DeveloperReplyText:               record[13],
+			ReviewLink:                       record[14],
 		}
 		if err := review.Insert(db); err != nil {
 			log.Println(err)
 			continue
 		}
+		postWord := review.ReviewText
+		if len(postWord) <= 0 {
+			continue
+		}
+		if tranlate {
+			postWord = Translate(postWord, review.ReviewerLanguage, "ja", atmc)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+		}
+		if err := PostSlack(SlackData{postWord, review.PackageName, ":santa:"}, GPReview.SlackURL); err != nil {
+			log.Println(err)
+			continue
+		}
 	}
-
 	return nil
 }

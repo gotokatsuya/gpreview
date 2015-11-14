@@ -22,3 +22,10 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+
+# gpreview
+*.csv
+*.db
+*.sqlite3
+*.tml

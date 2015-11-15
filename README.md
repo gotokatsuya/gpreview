@@ -1,6 +1,11 @@
 # gpreview
-Get google play app's reviews and Notify to slack.
+Get google play app's reviews and notify slack.
 
+#### Feature
+- Translatable
+
+
+## Install
 ```
 go get github.com/gotokatsuya/gpreview-go/cmd/gpreview
 ```
@@ -27,6 +32,7 @@ sqlite3 gpreviews.db
 ### Download Review files
 
 Use [gsutil](https://cloud.google.com/storage/docs/gsutil), please.
+
 
 ## Config
 

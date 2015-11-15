@@ -1,7 +1,7 @@
-bucket_id="pubsite_prod_rev_hoge"
-package_name="hoge.hoge"
+bucket_id="pubsite_prod_rev_xxx"
+package_name=""
 
-ms_tranlator_client_id="hoge"
-ms_tranlator_client_secret="hoge"
+ms_tranlator_client_id=""
+ms_tranlator_client_secret=""
 
-slack_url="hoge"
+slack_url=""

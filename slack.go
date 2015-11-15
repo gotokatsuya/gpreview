@@ -32,7 +32,7 @@ func PostSlack(d SlackData, url string) error {
 		return err
 	}
 
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	// do request
 	client := http.Client{}

@@ -1,5 +1,5 @@
 # gpreview
-Get google play app's translated reviews and Notify reviews to slack.
+Get google play app's reviews and Notify to slack.
 
 ```
 go get github.com/gotokatsuya/gpreview-go/cmd/gpreview
@@ -21,7 +21,7 @@ go get github.com/gotokatsuya/gpreview-go/cmd/gpreview
 
 Create a database.
 ```
-sqlite3 gpreview.db
+sqlite3 gpreviews.db
 ```
 
 ### Download Review files

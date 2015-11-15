@@ -1,5 +1,5 @@
 # gpreview
-Get google play app's reviews
+Get google play app's translated reviews and Notify reviews to slack.
 
 ```
 go get github.com/gotokatsuya/gpreview-go/cmd/gpreview

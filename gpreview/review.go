@@ -85,7 +85,7 @@ func NotifyTranslatedReviews(dbName, fileName, from, to string) error {
 			continue
 		}
 
-		log.Printf("%#v", record)
+		log.Println(fmt.Sprintf("%#v", record))
 
 		review := Review{
 			PackageName: record[0],
@@ -111,15 +111,21 @@ func NotifyTranslatedReviews(dbName, fileName, from, to string) error {
 
 		title := review.ReviewTitle
 		if len(title) > 0 && len(from) > 0 && len(to) > 0 {
-			title = Translate(title, from, to, atmc)
+			title, err := Translate(title, from, to, atmc)
+			if err != nil {
+				log.Println(err)
+			}
+			log.Println(title)
 		}
-		log.Println(title)
 
 		text := review.ReviewText
 		if len(text) > 0 && len(from) > 0 && len(to) > 0 {
-			text = Translate(text, from, to, atmc)
+			text, err := Translate(text, from, to, atmc)
+			if err != nil {
+				log.Println(err)
+			}
+			log.Println(text)
 		}
-		log.Println(text)
 
 		if len(GPReview.SlackURL) > 0 {
 			if err := PostSlack(SlackData{

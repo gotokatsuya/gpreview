@@ -48,7 +48,7 @@ func (ms *MsAccessTokenMessageCache) isRequireRenew() bool {
 	return false
 }
 
-func (ms *MsAccessTokenMessageCache) loadNewAccessTokenMessage() {
+func (ms *MsAccessTokenMessageCache) loadNewAccessTokenMessage() error {
 	resp, err := http.PostForm(msTranslatorAccessTokenURL,
 		url.Values{
 			"client_id":     {GPReview.MsTranslatorClientID},
@@ -56,14 +56,15 @@ func (ms *MsAccessTokenMessageCache) loadNewAccessTokenMessage() {
 			"scope":         {msTranslatorScope},
 			"grant_type":    {msTranslatorGrantType}})
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer resp.Body.Close()
 	err = json.NewDecoder(resp.Body).Decode(&ms.accessTokenMessage)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	ms.updateTime = time.Now()
+	return nil
 }
 
 func (ms *MsAccessTokenMessageCache) getAccessTokenMessage() MsAccessTokenMessage {
@@ -82,7 +83,7 @@ type Result struct {
 	String string `xml:"string"`
 }
 
-func Translate(word, from, to string, atmc *MsAccessTokenMessageCache) string {
+func Translate(word, from, to string, atmc *MsAccessTokenMessageCache) (string, error) {
 	values := url.Values{"appId": {""}, "text": {word}, "from": {from}, "to": {to}}
 	query := values.Encode()
 	accessToken := atmc.getAccessToken()
@@ -91,13 +92,13 @@ func Translate(word, from, to string, atmc *MsAccessTokenMessageCache) string {
 
 	req, err := http.NewRequest("GET", msTranslatorURL+"?"+query, nil)
 	if err != nil {
-		panic(err)
+		return word, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		return word, err
 	}
 	defer resp.Body.Close()
 
@@ -108,7 +109,7 @@ func Translate(word, from, to string, atmc *MsAccessTokenMessageCache) string {
 	var res *Result
 	err = xml.Unmarshal([]byte(bodyString), &res)
 	if err != nil {
-		panic(err)
+		return word, err
 	}
-	return res.String
+	return res.String, nil
 }

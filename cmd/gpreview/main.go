@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	gp "github.com/gotokatsuya/gpreview"
+	gp "github.com/gotokatsuya/gpreview-go/gpreview"
 )
 
 func init() {
@@ -17,8 +17,8 @@ func main() {
 	}
 	db := flag.String("db", "", "A path of writable database")
 	file := flag.String("file", "", "A path of review csv file")
-	from := flag.String("from", "en", "A language you want to translate")
-	to := flag.String("to", "ja", "A language you can understand")
+	from := flag.String("from", "", "A language you want to translate")
+	to := flag.String("to", "", "A language you can understand")
 	flag.Parse()
 	if *db == "" {
 		log.Println("Specify a path of db, please")
